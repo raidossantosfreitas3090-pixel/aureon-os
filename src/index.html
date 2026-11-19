@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Aureon-OS</title>
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+
+  <div class="hardware-switcher">
+    <button id="btn-mode-phone" class="hw-btn active" onclick="AureonOS.setDeviceMode('phone')">Celular (9:16)</button>
+    <button id="btn-mode-tablet" class="hw-btn" onclick="AureonOS.setDeviceMode('tablet')">Tablet (16:24)</button>
+  </div>
+
+  <div id="aureon-device" class="mode-phone">
+    <div id="brightness-overlay"></div>
+
+    <section id="boot-screen" class="screen active">
+      <div class="boot-logo">
+        <div class="ring"></div>
+        <h1>Aureon-OS</h1>
+        <span class="boot-v2-badge">1.2 Alpha</span>
+      </div>
+      <p class="boot-tagline">A new experience. A new identity.</p>
+      <div class="boot-loader">
+        <div class="boot-progress"></div>
+      </div>
+    </section>
+
+    <section id="lock-screen" class="screen">
+      <div class="lock-content-wrapper" id="lock-drag-layer">
+        <div class="lock-top-status">
+          <span>Aureon-OS 5G</span>
+          <span id="lock-battery">100%</span>
+        </div>
+
+        <div class="lock-header">
+          <div id="lock-time" class="lock-time">00:00</div>
+          <div id="lock-date" class="lock-date">Carregando...</div>
+        </div>
+
+        <div class="lock-notifications">
+          <div class="lock-notif-card">
+            <span><strong>Aureon-OS Kernel</strong></span>
+            <p>Sistema pronto. Deslize para cima para iniciar.</p>
+          </div>
+        </div>
+        
+        <div class="lock-footer">
+          <div class="unlock-icon">&uarr;</div>
+          <p id="lock-hint">Deslize para cima</p>
+          <div class="swipe-pill"></div>
+        </div>
+      </div>
+
+      <div id="auth-overlay" class="auth-overlay hidden">
+        <div class="auth-box">
+          <h3 id="auth-title">PIN</h3>
+          <p id="auth-error" class="auth-error"></p>
+          
+          <div id="pin-dots" class="pin-dots">
+            <span></span><span></span><span></span><span></span>
+          </div>
+
+          <div id="pin-pad" class="pin-pad">
+            <button data-num="1">1</button>
+            <button data-num="2">2</button>
+            <button data-num="3">3</button>
+            <button data-num="4">4</button>
+            <button data-num="5">5</button>
+            <button data-num="6">6</button>
+            <button data-num="7">7</button>
+            <button data-num="8">8</button>
+            <button data-num="9">9</button>
+            <button id="pin-cancel" class="action-key">Voltar</button>
+            <button data-num="0">0</button>
+            <button id="pin-del" class="action-key">&larr;</button>
+          </div>
+
+          <div id="pass-pad" class="pass-pad hidden">
+            <input type="password" id="pass-input" placeholder="Senha..." />
+            <div class="pass-actions">
+              <button id="pass-cancel" class="btn-sec">Voltar</button>
+              <button id="pass-submit" class="btn-pri">Entrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="home-screen" class="screen">
+      <header class="status-bar" id="status-bar-trigger">
+        <span id="status-time">00:00</span>
+        <div class="notch-pill"></div>
+        <div class="status-icons">
+          <span id="status-net">NET</span>
+          <span id="status-battery">100%</span>
+        </div>
+      </header>
+
+      <div id="control-center" class="control-center hidden">
+        <div class="cc-panel">
+          <div class="cc-header">
+            <span>Painel Rápido</span>
+            <button id="cc-close">X</button>
+          </div>
+          
+          <div class="cc-toggles">
+            <button class="cc-tile active" id="cc-wifi">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+              <small>Conexao</small>
+            </button>
+            <button class="cc-tile" onclick="AureonOS.toggleTheme()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+              <small>Tema</small>
+            </button>
+            <button class="cc-tile" onclick="AureonOS.playSound('notification')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              <small>Audio</small>
+            </button>
+            <button class="cc-tile" onclick="AureonOS.toggleDeviceMode()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              <small>Formato</small>
+            </button>
+          </div>
+
+          <div class="cc-slider-box">
+            <label>Brilho</label>
+            <input type="range" id="brightness-slider" min="30" max="100" value="100" />
+          </div>
+        </div>
+      </div>
+
+      <div class="home-widget">
+        <div class="widget-left">
+          <span class="widget-tag">Aureon-OS</span>
+          <h2 id="home-greeting">Bem-vindo</h2>
+        </div>
+        <div class="widget-right">
+          <span id="home-date-short">--/--</span>
+        </div>
+      </div>
+
+      <main class="app-grid">
+        <button class="app-icon" data-app="settings">
+          <div class="icon-box" style="--bg: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <span>Ajustes</span>
+        </button>
+
+        <button class="app-icon" data-app="notes">
+          <div class="icon-box" style="--bg: linear-gradient(135deg, #f59e0b, #b45309);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <span>Notas</span>
+        </button>
+
+        <button class="app-icon" data-app="calculator">
+          <div class="icon-box" style="--bg: linear-gradient(135deg, #10b981, #047857);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="10" y2="18"/><line x1="14" y1="18" x2="16" y2="18"/></svg>
+          </div>
+          <span>Calculadora</span>
+        </button>
+
+        <button class="app-icon" data-app="wallpapers">
+          <div class="icon-box" style="--bg: linear-gradient(135deg, #ec4899, #be185d);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <span>Fundos</span>
+        </button>
+
+        <button class="app-icon" data-app="terminal">
+          <div class="icon-box" style="--bg: linear-gradient(135deg, #334155, #0f172a);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          </div>
+          <span>Terminal</span>
+        </button>
+
+        <button class="app-icon" data-app="about">
+          <div class="icon-box" style="--bg: linear-gradient(135deg, #8b5cf6, #5b21b6);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </div>
+          <span>Sobre</span>
+        </button>
+      </main>
+
+      <footer class="dock">
+        <button class="dock-btn" id="btn-lock" title="Bloquear">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </button>
+        <button class="dock-btn" id="btn-home" title="Inicio">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+        </button>
+        <button class="dock-btn" id="btn-cc-dock" title="Painel">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+        </button>
+      </footer>
+    </section>
+
+    <section id="app-window" class="app-window hidden">
+      <header class="app-header">
+        <button id="close-app-btn">&larr;</button>
+        <h2 id="app-title">App</h2>
+      </header>
+      <div id="app-content" class="app-content"></div>
+    </section>
+
+    <div id="aureon-modal" class="aureon-modal-overlay">
+      <div class="aureon-modal-box">
+        <h3 id="modal-title">Titulo</h3>
+        <input type="text" id="modal-input" class="aureon-modal-input" placeholder="Digite..." />
+        <div class="aureon-modal-actions">
+          <button id="modal-btn-cancel" class="btn-modal-cancel">Cancelar</button>
+          <button id="modal-btn-ok" class="btn-modal-confirm">Ok</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
